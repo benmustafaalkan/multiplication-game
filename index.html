@@ -7,19 +7,31 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <div id="question">2 x 3 = ?</div>
-        <div id="answers">
-            <button class="answer-btn">4</button>
-            <button class="answer-btn">6</button>
-            <button class="answer-btn">8</button>
-            <button class="answer-btn">10</button>
+    <div id="start-screen" class="screen">
+        <h1>Multiplication Game</h1>
+        <input type="text" id="player-name" placeholder="Enter your name" required>
+        <button id="start-game">Start Game</button>
+        <p id="name-error" class="error" style="display:none;">This name is already taken. Please choose another.</p>
+    </div>
+
+    <div id="level-selection" class="screen" style="display:none;">
+        <h2>Select Level</h2>
+        <div id="levels">
+            <!-- Levels will be dynamically generated here -->
         </div>
+    </div>
+
+    <div id="game-screen" class="screen" style="display:none;">
+        <div id="question-info">
+            <span id="current-question">Question 1</span> / <span id="total-questions">25</span>
+        </div>
+        <div id="question"></div>
+        <div id="answers"></div>
         <div id="score">Score: 0</div>
         <div id="timer">Time: 0s</div>
         <button id="retry-btn" style="display:none;">Retry</button>
     </div>
 
-    <script src="script.js"></script>
+	<script src="script.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,35 +8,61 @@ body {
     margin: 0;
 }
 
-.game-container {
+.screen {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 300px;
 }
 
-#question {
-    font-size: 24px;
+h1, h2 {
+    color: #333;
     margin-bottom: 20px;
 }
 
-.answer-btn {
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
     width: 100%;
     padding: 10px;
-    margin: 5px 0;
-    font-size: 18px;
+    margin: 10px 0;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
 }
 
-#score, #timer {
-    margin-top: 20px;
-    font-size: 18px;
+button:disabled {
+    background-color: #ccc;
 }
 
-#retry-btn {
-    margin-top: 20px;
-    padding: 10px;
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+#levels button {
+    margin: 5px;
+}
+
+.locked {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#question-info, #score, #timer {
+    margin-top: 10px;
     font-size: 18px;
+    color: #333;
 }

@@ -1,16 +1,83 @@
-let score = 0;
-let time = 0;
-let currentQuestion = null;
-let timerInterval;
+let playerName = "";
+let currentLevel = 1;
+let levelsUnlocked = JSON.parse(localStorage.getItem("levelsUnlocked")) || 1;
+let playersData = JSON.parse(localStorage.getItem("playersData")) || {};
 
-function startGame() {
-    resetGame();
+document.getElementById('start-game').onclick = function() {
+    const nameInput = document.getElementById('player-name').value.trim();
+    
+    if (nameInput === "") {
+        showError("Name cannot be empty.");
+        return;
+    }
+    
+    if (playersData[nameInput] && playersData[nameInput].completedLevel) {
+        playerName = nameInput;
+        currentLevel = playersData[nameInput].completedLevel + 1;
+    } else if (!playersData[nameInput]) {
+        playerName = nameInput;
+        playersData[playerName] = { completedLevel: 0 };
+    } else {
+        showError("This name is already taken. Please choose another.");
+        return;
+    }
+
+    savePlayersData();
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('level-selection').style.display = 'block';
+    renderLevels();
+};
+
+function showError(message) {
+    const errorElement = document.getElementById('name-error');
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+}
+
+function savePlayersData() {
+    localStorage.setItem("playersData", JSON.stringify(playersData));
+}
+
+function renderLevels() {
+    const levelsContainer = document.getElementById('levels');
+    levelsContainer.innerHTML = '';
+    const totalLevels = 10;
+
+    for (let i = 1; i <= totalLevels; i++) {
+        const levelButton = document.createElement('button');
+        levelButton.textContent = `Level ${i}`;
+        
+        if (i <= currentLevel) {
+            levelButton.onclick = function() {
+                startGame(i);
+            };
+        } else {
+            levelButton.disabled = true;
+            levelButton.classList.add('locked');
+        }
+
+        levelsContainer.appendChild(levelButton);
+    }
+}
+
+function startGame(level) {
+    document.getElementById('level-selection').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'block';
+    currentLevel = level;
+    // Initialize the game for the selected level
     showQuestion();
 }
 
-function resetGame() {
-    score = 0;
+function showQuestion() {
     time = 0;
+    currentQuestionIndex = 1;
+    document.getElementById('current-question').textContent = `Question ${currentQuestionIndex}`;
+    document.getElementById('total-questions').textContent = totalQuestions;
+    startTimer();
+    // Generate and show the question here
+}
+
+function startTimer() {
     clearInterval(timerInterval);
     timerInterval = setInterval(updateTime, 1000);
 }
@@ -20,60 +87,21 @@ function updateTime() {
     document.getElementById('timer').textContent = `Time: ${time}s`;
 }
 
-function showQuestion() {
-    // Rastgele bir çarpım sorusu oluştur
-    const num1 = Math.floor(Math.random() * 8) + 2;
-    const num2 = Math.floor(Math.random() * 8) + 2;
-    currentQuestion = {
-        num1: num1,
-        num2: num2,
-        correctAnswer: num1 * num2
-    };
-
-    // Soru ve cevapları güncelle
-    document.getElementById('question').textContent = `${num1} x ${num2} = ?`;
-    const answerButtons = document.querySelectorAll('.answer-btn');
-    const correctIndex = Math.floor(Math.random() * 4);
-
-    answerButtons.forEach((btn, index) => {
-        if (index === correctIndex) {
-            btn.textContent = currentQuestion.correctAnswer;
-            btn.onclick = correctAnswer;
-        } else {
-            btn.textContent = generateWrongAnswer(currentQuestion.correctAnswer);
-            btn.onclick = wrongAnswer;
-        }
-    });
-}
-
-function generateWrongAnswer(correct) {
-    let wrongAnswer;
-    do {
-        wrongAnswer = Math.floor(Math.random() * 81) + 1; // 9x9 tablosu için maksimum 81
-    } while (wrongAnswer === correct);
-    return wrongAnswer;
-}
-
 function correctAnswer() {
     score += calculateScore();
-    document.getElementById('score').textContent = `Score: ${score}`;
-    showQuestion();
-}
-
-function wrongAnswer() {
-    document.getElementById('retry-btn').style.display = 'block';
-}
-
-function calculateScore() {
-    if (time <= 5) return 100;
-    if (time <= 10) return 80;
-    if (time <= 15) return 60;
-    return 40;
+    currentQuestionIndex++;
+    if (currentQuestionIndex > totalQuestions) {
+        playersData[playerName].completedLevel = currentLevel;
+        savePlayersData();
+        levelsUnlocked++;
+        localStorage.setItem("levelsUnlocked", JSON.stringify(levelsUnlocked));
+        renderLevels();
+    } else {
+        showQuestion();
+    }
 }
 
 document.getElementById('retry-btn').onclick = function() {
     document.getElementById('retry-btn').style.display = 'none';
     showQuestion();
 }
-
-startGame();
