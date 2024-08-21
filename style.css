@@ -61,10 +61,18 @@ button:disabled {
     cursor: not-allowed;
 }
 
-#question-info, #score, #timer {
+#question-info {
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 16px;
     color: #333;
+    text-align: right;
+}
+
+.question-text {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
 }
 
 .answers-container {
@@ -77,4 +85,12 @@ button:disabled {
     padding: 10px;
     width: 100%;
     font-size: 16px;
+}
+
+#score-timer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #333;
 }

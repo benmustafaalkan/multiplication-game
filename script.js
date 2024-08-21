@@ -82,7 +82,7 @@ function showQuestion() {
     const num2 = Math.floor(Math.random() * 9) + 1;  // 1 ile 9 arasında bir sayı
     const correctAnswer = num1 * num2;
 
-    document.getElementById('question').textContent = `${num1} x ${num2} = ?`;
+    document.getElementById('question').textContent = `${num1} x ${num2}`;
 
     // Cevap butonlarını oluşturma
     const answersContainer = document.getElementById('answers');
@@ -178,4 +178,12 @@ function finishLevel() {
 document.getElementById('retry-btn').onclick = function() {
     document.getElementById('retry-btn').style.display = 'none';
     showQuestion();
+}
+
+// Exit button functionality to go back to level selection
+document.getElementById('exit-btn').onclick = function() {
+    clearInterval(timerInterval);
+    document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('level-selection').style.display = 'block';
+    renderLevels();
 }
