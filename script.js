@@ -129,10 +129,15 @@ function correctAnswerHandler() {
 
 function wrongAnswerHandler() {
     document.getElementById('retry-btn').style.display = 'block';
-    document.getElementById('retry-btn').onclick = function() {
-        this.style.display = 'none';
-        showQuestion();
-    };
+}
+
+document.getElementById('retry-btn').onclick = function() {
+    this.style.display = 'none';
+    showSameQuestion();
+};
+
+function showSameQuestion() {
+    updateScoreAndTime(); // Puan güncellenir, süre devam eder
 }
 
 function shuffleAnswers(container) {

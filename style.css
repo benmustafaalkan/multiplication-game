@@ -124,13 +124,13 @@ button:disabled {
 }
 
 .retry-button {
-    width: 100%;
-    padding: 10px;
-    margin: 15px 0;
+    width: 50%;
+    padding: 8px;
+    margin: 15px auto 0 auto;
     background-color: #ff9800;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
 }
