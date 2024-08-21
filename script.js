@@ -2,6 +2,11 @@ let playerName = "";
 let currentLevel = 1;
 let levelsUnlocked = JSON.parse(localStorage.getItem("levelsUnlocked")) || 1;
 let playersData = JSON.parse(localStorage.getItem("playersData")) || {};
+let score = 0;
+let time = 0;
+let currentQuestionIndex = 1;
+let totalQuestions = 25;
+let timerInterval;
 
 document.getElementById('start-game').onclick = function() {
     const nameInput = document.getElementById('player-name').value.trim();
@@ -11,7 +16,7 @@ document.getElementById('start-game').onclick = function() {
         return;
     }
     
-    if (playersData[nameInput] && playersData[nameInput].completedLevel) {
+    if (playersData[nameInput]) {
         playerName = nameInput;
         currentLevel = playersData[nameInput].completedLevel + 1;
     } else if (!playersData[nameInput]) {
@@ -47,7 +52,7 @@ function renderLevels() {
         const levelButton = document.createElement('button');
         levelButton.textContent = `Level ${i}`;
         
-        if (i <= currentLevel) {
+        if (i <= levelsUnlocked) {
             levelButton.onclick = function() {
                 startGame(i);
             };
@@ -64,17 +69,88 @@ function startGame(level) {
     document.getElementById('level-selection').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
     currentLevel = level;
-    // Initialize the game for the selected level
+    score = 0;
+    time = 0;
+    currentQuestionIndex = 1;
+    updateScoreAndTime();
     showQuestion();
 }
 
 function showQuestion() {
-    time = 0;
-    currentQuestionIndex = 1;
-    document.getElementById('current-question').textContent = `Question ${currentQuestionIndex}`;
-    document.getElementById('total-questions').textContent = totalQuestions;
+    // Rastgele bir çarpım sorusu oluştur
+    const num1 = Math.floor(Math.random() * 9) + 1;  // 1 ile 9 arasında bir sayı
+    const num2 = Math.floor(Math.random() * 9) + 1;  // 1 ile 9 arasında bir sayı
+    const correctAnswer = num1 * num2;
+
+    document.getElementById('question').textContent = `${num1} x ${num2} = ?`;
+
+    // Cevap butonlarını oluşturma
+    const answersContainer = document.getElementById('answers');
+    answersContainer.innerHTML = '';  // Mevcut cevapları temizle
+
+    const correctButton = document.createElement('button');
+    correctButton.textContent = correctAnswer;
+    correctButton.onclick = correctAnswerHandler;
+    answersContainer.appendChild(correctButton);
+
+    for (let i = 0; i < 3; i++) {
+        const wrongAnswer = generateWrongAnswer(correctAnswer);
+        const wrongButton = document.createElement('button');
+        wrongButton.textContent = wrongAnswer;
+        wrongButton.onclick = wrongAnswerHandler;
+        answersContainer.appendChild(wrongButton);
+    }
+
+    shuffleAnswers(answersContainer);  // Cevapları karıştırma
+    resetTimer();
     startTimer();
-    // Generate and show the question here
+}
+
+function generateWrongAnswer(correctAnswer) {
+    let wrongAnswer;
+    do {
+        wrongAnswer = Math.floor(Math.random() * 81) + 1;  // 1 ile 81 arasında yanlış cevap
+    } while (wrongAnswer === correctAnswer);
+    return wrongAnswer;
+}
+
+function correctAnswerHandler() {
+    score += calculateScore();
+    updateScoreAndTime();
+    currentQuestionIndex++;
+    
+    if (currentQuestionIndex > totalQuestions) {
+        finishLevel();
+    } else {
+        showQuestion();
+    }
+}
+
+function wrongAnswerHandler() {
+    alert('Try again!');
+}
+
+function shuffleAnswers(container) {
+    for (let i = container.children.length; i >= 0; i--) {
+        container.appendChild(container.children[Math.random() * i | 0]);
+    }
+}
+
+function calculateScore() {
+    if (time <= 5) return 100;
+    if (time <= 10) return 80;
+    if (time <= 15) return 60;
+    return 40;
+}
+
+function updateScoreAndTime() {
+    document.getElementById('score').textContent = `Score: ${score}`;
+    document.getElementById('current-question').textContent = `Question ${currentQuestionIndex}`;
+}
+
+function resetTimer() {
+    time = 0;
+    document.getElementById('timer').textContent = `Time: 0s`;
 }
 
 function startTimer() {
@@ -87,18 +163,16 @@ function updateTime() {
     document.getElementById('timer').textContent = `Time: ${time}s`;
 }
 
-function correctAnswer() {
-    score += calculateScore();
-    currentQuestionIndex++;
-    if (currentQuestionIndex > totalQuestions) {
-        playersData[playerName].completedLevel = currentLevel;
-        savePlayersData();
-        levelsUnlocked++;
-        localStorage.setItem("levelsUnlocked", JSON.stringify(levelsUnlocked));
-        renderLevels();
-    } else {
-        showQuestion();
-    }
+function finishLevel() {
+    clearInterval(timerInterval);
+    playersData[playerName].completedLevel = currentLevel;
+    savePlayersData();
+    levelsUnlocked++;
+    localStorage.setItem("levelsUnlocked", JSON.stringify(levelsUnlocked));
+    alert('Level Completed!');
+    document.getElementById('game-screen').style.display = 'none';
+    renderLevels();
+    document.getElementById('level-selection').style.display = 'block';
 }
 
 document.getElementById('retry-btn').onclick = function() {

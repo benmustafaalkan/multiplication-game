@@ -66,3 +66,15 @@ button:disabled {
     font-size: 18px;
     color: #333;
 }
+
+.answers-container {
+    margin-top: 20px;
+}
+
+.answers-container button {
+    display: block;
+    margin: 5px 0;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+}
