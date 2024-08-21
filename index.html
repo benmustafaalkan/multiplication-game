@@ -11,13 +11,13 @@
         <h1>Multiplication Game</h1>
         <input type="text" id="player-name" placeholder="Enter your name" required>
         <button id="start-game">Start Game</button>
+        <p class="info-message">You can come back with this name later and continue from where you left off.</p>
         <p id="name-error" class="error" style="display:none;">This name is already taken. Please choose another.</p>
     </div>
 
     <div id="level-selection" class="screen" style="display:none;">
         <h2>Select Level</h2>
         <div id="user-name-display"></div>
-        <p class="info-message">You can come back with this name later and continue from where you left off.</p>
         <div id="levels">
             <!-- Levels will be dynamically generated here -->
         </div>
@@ -35,6 +35,7 @@
             <div id="score">Score: 0</div>
             <div id="timer">Time: 0s</div>
         </div>
+        <button id="retry-btn" class="retry-button" style="display:none;">Try Again</button>
         <button id="exit-btn" class="exit-button">Exit Level</button>
     </div>
 

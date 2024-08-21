@@ -128,7 +128,11 @@ function correctAnswerHandler() {
 }
 
 function wrongAnswerHandler() {
-    alert('Try again!');
+    document.getElementById('retry-btn').style.display = 'block';
+    document.getElementById('retry-btn').onclick = function() {
+        this.style.display = 'none';
+        showQuestion();
+    };
 }
 
 function shuffleAnswers(container) {
@@ -176,12 +180,6 @@ function finishLevel() {
     document.getElementById('level-selection').style.display = 'block';
 }
 
-document.getElementById('retry-btn').onclick = function() {
-    document.getElementById('retry-btn').style.display = 'none';
-    showQuestion();
-}
-
-// Exit button functionality to go back to level selection
 document.getElementById('exit-btn').onclick = function() {
     clearInterval(timerInterval);
     document.getElementById('game-screen').style.display = 'none';

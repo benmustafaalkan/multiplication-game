@@ -103,4 +103,34 @@ button:disabled {
     font-size: 16px;
 }
 
-#
+#score-timer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #333;
+}
+
+.exit-button {
+    width: 50%;
+    padding: 8px;
+    margin: 15px auto 0 auto;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.retry-button {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
