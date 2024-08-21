@@ -69,6 +69,7 @@ function renderLevels() {
 function startGame(level) {
     document.getElementById('level-selection').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
+    document.getElementById('level-completed-screen').style.display = 'none';
     currentLevel = level;
     score = 0;
     time = 0;
@@ -78,16 +79,14 @@ function startGame(level) {
 }
 
 function showQuestion() {
-    // Rastgele bir çarpım sorusu oluştur
-    const num1 = Math.floor(Math.random() * 9) + 1;  // 1 ile 9 arasında bir sayı
-    const num2 = Math.floor(Math.random() * 9) + 1;  // 1 ile 9 arasında bir sayı
+    const num1 = Math.floor(Math.random() * 9) + 1;  
+    const num2 = Math.floor(Math.random() * 9) + 1;  
     const correctAnswer = num1 * num2;
 
     document.getElementById('question').textContent = `${num1} x ${num2}`;
 
-    // Cevap butonlarını oluşturma
     const answersContainer = document.getElementById('answers');
-    answersContainer.innerHTML = '';  // Mevcut cevapları temizle
+    answersContainer.innerHTML = '';  
 
     const correctButton = document.createElement('button');
     correctButton.textContent = correctAnswer;
@@ -102,7 +101,7 @@ function showQuestion() {
         answersContainer.appendChild(wrongButton);
     }
 
-    shuffleAnswers(answersContainer);  // Cevapları karıştırma
+    shuffleAnswers(answersContainer);  
     resetTimer();
     startTimer();
 }
@@ -110,7 +109,7 @@ function showQuestion() {
 function generateWrongAnswer(correctAnswer) {
     let wrongAnswer;
     do {
-        wrongAnswer = Math.floor(Math.random() * 81) + 1;  // 1 ile 81 arasında yanlış cevap
+        wrongAnswer = Math.floor(Math.random() * 81) + 1;  
     } while (wrongAnswer === correctAnswer);
     return wrongAnswer;
 }
@@ -120,7 +119,7 @@ function correctAnswerHandler() {
     updateScoreAndTime();
     currentQuestionIndex++;
     
-    document.getElementById('retry-btn').style.display = 'none';  // "Try Again" butonunu gizle
+    document.getElementById('retry-btn').style.display = 'none';  
 
     if (currentQuestionIndex > totalQuestions) {
         finishLevel();
@@ -135,12 +134,11 @@ function wrongAnswerHandler() {
 
 document.getElementById('retry-btn').onclick = function() {
     this.style.display = 'none';
-    // Aynı soruyu tekrar göster
     showSameQuestion();
 };
 
 function showSameQuestion() {
-    updateScoreAndTime(); // Puan güncellenir, süre devam eder
+    updateScoreAndTime(); 
 }
 
 function shuffleAnswers(container) {
@@ -180,12 +178,20 @@ function finishLevel() {
     clearInterval(timerInterval);
     playersData[playerName].completedLevel = currentLevel;
     savePlayersData();
+    if (score >= 2000) {
+        document.getElementById('next-level-btn').style.display = 'inline-block';
+        document.getElementById('retry-level-btn').style.display = 'none';
+    } else {
+        document.getElementById('retry-level-btn').style.display = 'inline-block';
+        document.getElementById('next-level-btn').style.display = 'none';
+    }
+
+    document.getElementById('level-score').textContent = `Your Score: ${score}`;
+    document.getElementById('level-completed-screen').style.display = 'block';
+    document.getElementById('game-screen').style.display = 'none';
+
     levelsUnlocked++;
     localStorage.setItem("levelsUnlocked", JSON.stringify(levelsUnlocked));
-    alert('Level Completed!');
-    document.getElementById('game-screen').style.display = 'none';
-    renderLevels();
-    document.getElementById('level-selection').style.display = 'block';
 }
 
 document.getElementById('exit-btn').onclick = function() {
@@ -194,3 +200,11 @@ document.getElementById('exit-btn').onclick = function() {
     document.getElementById('level-selection').style.display = 'block';
     renderLevels();
 }
+
+document.getElementById('next-level-btn').onclick = function() {
+    startGame(currentLevel + 1);
+};
+
+document.getElementById('retry-level-btn').onclick = function() {
+    startGame(currentLevel);
+};
