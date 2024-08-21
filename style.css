@@ -52,6 +52,12 @@ button:disabled {
     font-size: 14px;
 }
 
+.info-message {
+    color: green;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
 #levels button {
     margin: 5px;
 }
@@ -68,11 +74,21 @@ button:disabled {
     text-align: right;
 }
 
-.question-text {
+#question-container {
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.question-text {
     font-size: 24px;
     font-weight: bold;
     color: #000;
+    background-color: #e0f7fa;
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 2px solid #00acc1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .answers-container {
@@ -87,10 +103,4 @@ button:disabled {
     font-size: 16px;
 }
 
-#score-timer {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    color: #333;
-}
+#

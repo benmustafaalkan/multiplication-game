@@ -28,6 +28,7 @@ document.getElementById('start-game').onclick = function() {
     }
 
     savePlayersData();
+    document.getElementById('user-name-display').textContent = `Welcome, ${playerName}!`;
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('level-selection').style.display = 'block';
     renderLevels();
