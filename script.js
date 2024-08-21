@@ -120,6 +120,8 @@ function correctAnswerHandler() {
     updateScoreAndTime();
     currentQuestionIndex++;
     
+    document.getElementById('retry-btn').style.display = 'none';  // "Try Again" butonunu gizle
+
     if (currentQuestionIndex > totalQuestions) {
         finishLevel();
     } else {
@@ -133,6 +135,7 @@ function wrongAnswerHandler() {
 
 document.getElementById('retry-btn').onclick = function() {
     this.style.display = 'none';
+    // Aynı soruyu tekrar göster
     showSameQuestion();
 };
 
